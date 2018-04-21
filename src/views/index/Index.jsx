@@ -10,14 +10,13 @@ import List from '../../components/topics-list/TopicsList'
 
 /* eslint-disable */
 class HomePage extends Component {
-
   constructor (props) {
     super(props)
     this.state = {
       page: 1,        // 当前页
       total: 9999,    // 总条数
       topics: [],     // 主题列表
-      mark: false,
+      mark: false
     }
   }
 
@@ -25,34 +24,32 @@ class HomePage extends Component {
     this.setState({
       page: parseInt(querystring(this.props.location.search).page) || 1,
     }, () => {
-      this.fetchTopics()
+      this.fetchTopics().catch()
     })
   }
 
   componentDidUpdate (prevProps, prevState, prevContext) {
-    if (this.props.location != prevProps.location) {
+    if (this.props.location !== prevProps.location) {
       var page = parseInt(querystring(this.props.location.search).page)
       if (!page) {
         this.setState({page: 1}, () => {
-          this.fetchTopics()
+          this.fetchTopics().catch()
         })
         return
       }
-      this.fetchTopics()
+      this.fetchTopics().catch()
     }
   }
 
   /**
    * @func 获取主题列表
-   * @param {Number} page
-   * @param {String} tab
    */
-  fetchTopics = () => {
+  fetchTopics = async () => {
     this.setState({
       mark: true,
     })
     var beforeTime = Date.now()
-    axios.get(API_CONFIG.topics, {
+    let res = await axios.get(API_CONFIG.topics, {
       params: {
         limit: 40,
         mdrender: false,
@@ -60,26 +57,25 @@ class HomePage extends Component {
         page: this.state.page,
       }
     })
-      .then(res => {
-        var afterTime = Date.now() - beforeTime
-        if (afterTime <= 300) {
-          setTimeout(() => {
-            this.setState({
-              mark: false,
-            })
-          }, 300 - afterTime)
-        } else {
-          this.setState({
-            mark: false,
-          })
-        }
-        if (res.data.success) {
-          this.setState({
-            topics: res.data.data
-          })
-        }
+
+    var afterTime = Date.now() - beforeTime
+    if (afterTime <= 300) {
+      setTimeout(() => {
+        this.setState({
+          mark: false,
+        })
+      }, 300 - afterTime)
+    } else {
+      this.setState({
+        mark: false,
       })
-      .catch(e => e)
+    }
+    if (res.data.success) {
+      this.setState({
+        topics: res.data.data
+      })
+    }
+
   }
 
   isActive (tabVal) {
@@ -88,7 +84,7 @@ class HomePage extends Component {
 
   homePageActive = () => {
     var tab = querystring(this.props.location.search).tab
-    return !tab || tab == 'all'
+    return !tab || tab === 'all'
   }
 
   currentChange = (page) => {

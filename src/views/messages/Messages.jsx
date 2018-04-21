@@ -66,7 +66,7 @@ class Messages extends Component {
                           <span> 回复了你的话题 </span>
                           <Link to={`/topic/${item.topic.id}`}>{item.topic.title}</Link>
                         </div>
-                        : item.type == 'at'
+                        : item.type === 'at'
                         ?
                         <div>
                           <Link to={`/user/${item.author.loginname}`}>{item.author.loginname}</Link>

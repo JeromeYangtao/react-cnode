@@ -228,7 +228,7 @@ class Topic extends Component {
                             <Link to={`/user/${item.author.loginname}`}>{item.author.loginname}</Link>
                             <span>{index + 1}楼•{fromNow(item.create_at)}</span>
                             {
-                              this.detail.author.loginname == item.author.loginname && <strong>作者</strong>
+                              this.detail.author.loginname === item.author.loginname && <strong>作者</strong>
                             }
                           </div>
                           <div className="operation user-select-none">
