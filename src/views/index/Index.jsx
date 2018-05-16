@@ -79,12 +79,7 @@ class HomePage extends Component {
   }
 
   isActive (tabVal) {
-    return querystring(this.props.location.search).tab === tabVal
-  }
-
-  homePageActive = () => {
-    var tab = querystring(this.props.location.search).tab
-    return !tab || tab === 'all'
+    return this.props.location.search === tabVal.slice(1)
   }
 
   currentChange = (page) => {
@@ -100,17 +95,23 @@ class HomePage extends Component {
   }
 
   render () {
+    let navList = [
+      {link: '/', text: '全部'},
+      {link: '/?tab=good', text: '精华'},
+      {link: '/?tab=share', text: '分享'},
+      {link: '/?tab=ask', text: '问答'},
+      {link: '/?tab=job', text: '招聘'},
+      {link: '/?tab=dev', text: '客户端测试'},
+    ]
     return (
       <section className="index-section">
         <div className="topics-container index-container">
           {/* 导航 */}
           <nav className="nav">
-            <NavLink to="/" isActive={this.homePageActive}>全部</NavLink>
-            <NavLink to="/?tab=good" isActive={this.isActive.bind(this, 'good')}>精华</NavLink>
-            <NavLink to="/?tab=share" isActive={this.isActive.bind(this, 'share')}>分享</NavLink>
-            <NavLink to="/?tab=ask" isActive={this.isActive.bind(this, 'ask')}>问答</NavLink>
-            <NavLink to="/?tab=job" isActive={this.isActive.bind(this, 'job')}>招聘</NavLink>
-            <NavLink to="/?tab=dev" isActive={this.isActive.bind(this, 'dev')}>客户端测试</NavLink>
+            {navList.map((nav) => {
+              return <NavLink to={nav.link} isActive={this.isActive.bind(this, nav.link)}
+                              key={nav.link}>{nav.text}</NavLink>
+            })}
           </nav>
           <div className="topics-list">
             <div className="mark-box" style={{display: !this.state.mark ? 'none' : ''}}>
