@@ -16,7 +16,15 @@ class HomePage extends Component {
       page: 1,        // 当前页
       total: 9999,    // 总条数
       topics: [],     // 主题列表
-      mark: false
+      mark: false,
+      navList: [
+        {link: '/', text: '全部'},
+        {link: '/?tab=good', text: '精华'},
+        {link: '/?tab=share', text: '分享'},
+        {link: '/?tab=ask', text: '问答'},
+        {link: '/?tab=job', text: '招聘'},
+        {link: '/?tab=dev', text: '客户端测试'},
+      ]
     }
   }
 
@@ -94,25 +102,23 @@ class HomePage extends Component {
     window.scrollTo(0, 0)
   }
 
+  renderNav () {
+    {/* 导航 */}
+    return (
+      <nav className="nav">
+        {this.state.navList.map((nav) => {
+          return <NavLink to={nav.link} isActive={this.isActive.bind(this, nav.link)}
+                          key={nav.link}>{nav.text}</NavLink>
+        })}
+      </nav>
+    )
+  }
+
   render () {
-    let navList = [
-      {link: '/', text: '全部'},
-      {link: '/?tab=good', text: '精华'},
-      {link: '/?tab=share', text: '分享'},
-      {link: '/?tab=ask', text: '问答'},
-      {link: '/?tab=job', text: '招聘'},
-      {link: '/?tab=dev', text: '客户端测试'},
-    ]
     return (
       <section className="index-section">
         <div className="topics-container index-container">
-          {/* 导航 */}
-          <nav className="nav">
-            {navList.map((nav) => {
-              return <NavLink to={nav.link} isActive={this.isActive.bind(this, nav.link)}
-                              key={nav.link}>{nav.text}</NavLink>
-            })}
-          </nav>
+          {this.renderNav()}
           <div className="topics-list">
             <div className="mark-box" style={{display: !this.state.mark ? 'none' : ''}}>
               <div className="mark-line"></div>
